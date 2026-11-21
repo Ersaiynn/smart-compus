@@ -4,7 +4,7 @@ import {
   fallbackExplanation,
   type ExplainInput,
 } from './explain';
-import { fmt, type CanBookStatus } from './booking';
+import { canBook, fmt, type CanBookStatus } from './booking';
 
 function makeInput(overrides: Partial<ExplainInput> = {}): ExplainInput {
   return {
