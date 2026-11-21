@@ -44,6 +44,13 @@ export default function RoomCard({ room, bookings, result, onStartChange, onEndC
   const Icon = cfg?.icon;
   const [explanation, setExplanation] = useState<ExplainResult | null>(null);
   const [explaining, setExplaining] = useState(false);
+  const requestIdRef = useRef(0);
+
+function resetExplanation() {
+  requestIdRef.current += 1;
+  setExplanation(null);
+  setExplaining(false);
+}
 
   async function handleExplain() {
     if (!result || explaining) return;
