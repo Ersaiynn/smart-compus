@@ -53,27 +53,37 @@ function resetExplanation() {
 }
 
   async function handleExplain() {
-    if (!result || explaining) return;
-    setExplaining(true);
-    setExplanation(null);
-    try {
-      const res = await explainAvailability({
-        roomLabel: room.name,
-        start,
-        end,
-        isAvailable: result.status === 'available',
-        reasonCode: result.status,
-      });
+  if (!result || explaining) return;
+
+  const requestId = ++requestIdRef.current;
+  setExplaining(true);
+  setExplanation(null);
+
+  try {
+    const res = await explainAvailability({
+      roomLabel: room.name,
+      start,
+      end,
+      isAvailable: result.status === 'available',
+      reasonCode: result.status,
+    });
+
+    if (requestId === requestIdRef.current) {
       setExplanation(res);
-    } catch {
+    }
+  } catch {
+    if (requestId === requestIdRef.current) {
       setExplanation({
         explanation: 'Availability explanation is unavailable. Refer to the confirmed status above.',
         source: 'fallback',
       });
-    } finally {
+    }
+  } finally {
+    if (requestId === requestIdRef.current) {
       setExplaining(false);
     }
   }
+}
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md">
@@ -101,7 +111,10 @@ function resetExplanation() {
           <span className="text-xs font-medium text-gray-500">Start</span>
           <select
             value={start}
-            onChange={(e) => onStartChange(Number(e.target.value))}
+          onChange={(e) => {
+  resetExplanation();
+  onStartChange(Number(e.target.value));
+}}
             className="mt-1 w-full rounded-lg border border-gray-200 px-2 py-1.5 text-sm focus:border-sky-400 focus:ring-1 focus:ring-sky-400 outline-none"
           >
             {Array.from({ length: 48 }).map((_, i) => (
