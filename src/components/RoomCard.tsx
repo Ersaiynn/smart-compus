@@ -126,7 +126,10 @@ function resetExplanation() {
           <span className="text-xs font-medium text-gray-500">End</span>
           <select
             value={end}
-            onChange={(e) => onEndChange(Number(e.target.value))}
+           onChange={(e) => {
+  resetExplanation();
+  onEndChange(Number(e.target.value));
+}}
             className="mt-1 w-full rounded-lg border border-gray-200 px-2 py-1.5 text-sm focus:border-sky-400 focus:ring-1 focus:ring-sky-400 outline-none"
           >
             {Array.from({ length: 49 }).map((_, i) => {
