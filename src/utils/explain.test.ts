@@ -173,4 +173,59 @@ describe('explainAvailability — output validation', () => {
   it('fallback is deterministic', () => {
     expect(fallbackExplanation()).toEqual(fallbackExplanation());
   });
+  describe('explainAvailability — integration', () => {
+  it('explains an actual booking conflict', async () => {
+    const fixture = createDefaultFixture();
+
+    const bookingResult = canBook({
+      ...fixture,
+      now: 450,
+      start: 630,
+      end: 690,
+      blocked: false,
+      bookings: [{ start: 600, end: 660 }],
+    });
+
+    expect(bookingResult.status).toBe('unavailable');
+
+    const response = await explainAvailability(
+      makeInput({
+        start: 630,
+        end: 690,
+        isAvailable: bookingResult.status === 'available',
+        reasonCode: bookingResult.status,
+      }),
+    );
+
+    expect(response.source).toBe('mock');
+    expect(response.explanation).toContain('booked');
+  });
+
+  it('explains an available slot with touching endpoints', async () => {
+    const fixture = createDefaultFixture();
+
+    const bookingResult = canBook({
+      ...fixture,
+      now: 450,
+      start: 660,
+      end: 720,
+      blocked: false,
+      bookings: [{ start: 600, end: 660 }],
+    });
+
+    expect(bookingResult.status).toBe('available');
+
+    const response = await explainAvailability(
+      makeInput({
+        start: 660,
+        end: 720,
+        isAvailable: bookingResult.status === 'available',
+        reasonCode: bookingResult.status,
+      }),
+    );
+
+    expect(response.source).toBe('mock');
+    expect(response.explanation).toContain('Engineering Hall A');
+  });
+});
 });
