@@ -5,6 +5,7 @@ import {
   type ExplainInput,
 } from './explain';
 import { canBook, fmt, type CanBookStatus } from './booking';
+import { createDefaultFixture } from './booking.fixtures';
 
 function makeInput(overrides: Partial<ExplainInput> = {}): ExplainInput {
   return {
