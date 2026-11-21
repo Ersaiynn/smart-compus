@@ -1,7 +1,20 @@
-import { Clock, MapPin, Users, CheckCircle2, XCircle, Ban, AlertTriangle, ClockAlert } from 'lucide-react';
+import { useState } from 'react';
+import {
+  Clock,
+  MapPin,
+  Users,
+  CheckCircle2,
+  XCircle,
+  Ban,
+  AlertTriangle,
+  ClockAlert,
+  Sparkles,
+  Loader2,
+} from 'lucide-react';
 import type { Booking, Room } from '@/types';
 import type { CanBookResult } from '@/utils/booking';
 import { fmt } from '@/utils/booking';
+import { explainAvailability, type ExplainResult } from '@/utils/explain';
 import Timeline from './Timeline';
 
 interface Props {
@@ -29,6 +42,31 @@ const statusConfig: Record<
 export default function RoomCard({ room, bookings, result, onStartChange, onEndChange, start, end }: Props) {
   const cfg = result ? statusConfig[result.status] : null;
   const Icon = cfg?.icon;
+  const [explanation, setExplanation] = useState<ExplainResult | null>(null);
+  const [explaining, setExplaining] = useState(false);
+
+  async function handleExplain() {
+    if (!result || explaining) return;
+    setExplaining(true);
+    setExplanation(null);
+    try {
+      const res = await explainAvailability({
+        roomLabel: room.name,
+        start,
+        end,
+        isAvailable: result.status === 'available',
+        reasonCode: result.status,
+      });
+      setExplanation(res);
+    } catch {
+      setExplanation({
+        explanation: 'Availability explanation is unavailable. Refer to the confirmed status above.',
+        source: 'fallback',
+      });
+    } finally {
+      setExplaining(false);
+    }
+  }
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md">
@@ -94,6 +132,38 @@ export default function RoomCard({ room, bookings, result, onStartChange, onEndC
             <span className="font-semibold">{cfg.label}</span>
             <p className="text-xs opacity-90">{result.message}</p>
           </div>
+        </div>
+      )}
+
+      {result && (
+        <div className="mt-3">
+          <button
+            type="button"
+            onClick={handleExplain}
+            disabled={explaining}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-medium text-violet-700 transition hover:bg-violet-100 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {explaining ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <Sparkles className="h-3.5 w-3.5" />
+            )}
+            {explaining ? 'Explaining…' : 'Explain availability'}
+          </button>
+
+          {explanation && (
+            <div className="mt-2 rounded-lg border border-violet-100 bg-violet-50/50 px-3 py-2">
+              <span className="text-[10px] font-semibold uppercase tracking-wide text-violet-500">
+                Mock AI Explanation
+              </span>
+              <p className="mt-0.5 text-xs text-gray-600">{explanation.explanation}</p>
+              {explanation.source === 'fallback' && (
+                <span className="mt-1 inline-block text-[10px] text-gray-400">
+                  Fallback response — AI unavailable
+                </span>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>
