@@ -80,10 +80,15 @@ function resetExplanation() {
     }
   } catch {
     if (requestId === requestIdRef.current) {
-      setExplanation({
-        explanation: 'Availability explanation is unavailable. Refer to the confirmed status above.',
-        source: 'fallback',
-      });
+     
+setExplanation({
+  selectionKey,
+  value: {
+    explanation: 'Availability explanation is unavailable. Refer to the confirmed status above.',
+    source: 'fallback',
+  },
+});
+
     }
   } finally {
     if (requestId === requestIdRef.current) {
