@@ -151,7 +151,7 @@ function App() {
               end={end}
               onStartChange={(v) => {
                 setStart(v);
-                if (end < v + 30 || end > v + 120) {
+                if (end < v + 30 || end > v + MAX_DURATION) {
                   setEnd(Math.min(v + 30, 1440));
                 }
               }}
