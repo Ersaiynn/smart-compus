@@ -62,6 +62,11 @@ function isValidInput(input: unknown): input is ExplainInput {
   ) {
     return false;
   }
+  
+if (obj.isAvailable !== (obj.reasonCode === 'available')) {
+  return false;
+}
+
   return true;
 }
 
