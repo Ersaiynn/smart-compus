@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Building2, Search, Users } from 'lucide-react';
 import { rooms as sampleRooms, bookings as sampleBookings } from '@/sampleData';
-import { canBook, type CanBookResult } from '@/utils/booking';
+import { canBook, type CanBookResult, MAX_DURATION } from '@/utils/booking';
 import RoomCard from '@/components/RoomCard';
 
 const NOW_MINUTES = 450; // 07:30 — fixed for assignment demonstration
