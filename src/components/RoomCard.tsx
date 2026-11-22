@@ -42,7 +42,14 @@ const statusConfig: Record<
 export default function RoomCard({ room, bookings, result, onStartChange, onEndChange, start, end }: Props) {
   const cfg = result ? statusConfig[result.status] : null;
   const Icon = cfg?.icon;
-  const [explanation, setExplanation] = useState<ExplainResult | null>(null);
+  
+const selectionKey = `${room.id}:${start}:${end}:${result?.status ?? 'none'}`;
+
+const [explanation, setExplanation] = useState<{
+  value: ExplainResult;
+  selectionKey: string;
+} | null>(null);
+
   const [explaining, setExplaining] = useState(false);
   const requestIdRef = useRef(0);
 
