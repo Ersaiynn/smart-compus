@@ -191,7 +191,7 @@ setExplanation({
               <span className="text-[10px] font-semibold uppercase tracking-wide text-violet-500">
                 Mock AI Explanation
               </span>
-              <p className="mt-0.5 text-xs text-gray-600">{explanation.explanation}</p>
+              <p className="mt-0.5 text-xs text-gray-600">{explanation.value.explanation}</p>
               {explanation.source === 'fallback' && (
                 <span className="mt-1 inline-block text-[10px] text-gray-400">
                   Fallback response — AI unavailable
