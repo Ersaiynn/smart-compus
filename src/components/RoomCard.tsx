@@ -76,7 +76,7 @@ function resetExplanation() {
     });
 
     if (requestId === requestIdRef.current) {
-      setExplanation(res);
+     setExplanation({ value: res, selectionKey });
     }
   } catch {
     if (requestId === requestIdRef.current) {
