@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import type { Booking, Room } from '@/types';
 import type { CanBookResult } from '@/utils/booking';
-import { fmt } from '@/utils/booking';
+import { fmt, MAX_DURATION } from '@/utils/booking';
 import { explainAvailability, type ExplainResult } from '@/utils/explain';
 import Timeline from './Timeline';
 
