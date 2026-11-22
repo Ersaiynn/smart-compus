@@ -134,7 +134,7 @@ function resetExplanation() {
           >
             {Array.from({ length: 49 }).map((_, i) => {
               const val = i * 30;
-              if (val <= start || val > start + 120) return null;
+              if (val <= start || val > start + MAX_DURATION) return null;
               return (
                 <option key={i} value={val}>{fmt(val)}</option>
               );
