@@ -186,7 +186,7 @@ setExplanation({
             {explaining ? 'Explaining…' : 'Explain availability'}
           </button>
 
-          {explanation && (
+        {explanation && explanation.selectionKey === selectionKey && (
             <div className="mt-2 rounded-lg border border-violet-100 bg-violet-50/50 px-3 py-2">
               <span className="text-[10px] font-semibold uppercase tracking-wide text-violet-500">
                 Mock AI Explanation
