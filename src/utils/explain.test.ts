@@ -137,6 +137,19 @@ describe('explainAvailability — failure handling', () => {
     );
     expect(result.source).toBe('fallback');
   });
+    it('rejects true availability with unavailable reason', async () => {
+    const result = await explainAvailability(
+      makeInput({ isAvailable: true, reasonCode: 'unavailable' }),
+    );
+    expect(result.source).toBe('fallback');
+  });
+
+  it('rejects false availability with available reason', async () => {
+    const result = await explainAvailability(
+      makeInput({ isAvailable: false, reasonCode: 'available' }),
+    );
+    expect(result.source).toBe('fallback');
+  });
 });
 
 describe('explainAvailability — output validation', () => {
